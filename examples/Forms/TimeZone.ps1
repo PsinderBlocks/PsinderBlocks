@@ -1,25 +1,43 @@
 <#
 .SYNOPSIS
-    Short description
+    Manage the TimeZone of a node by ID
 .DESCRIPTION
-    Long description
+    Manage the TimeZone of a node by ID
+.FUNCTIONALITY
+    TimeZone
 .EXAMPLE
     MINIMAL GET PARAMETERS:
 .EXAMPLE
-    MINIMAL TEST PARAMETERS: SomeProperty 'Central Standard Time'
+    MINIMAL TEST PARAMETERS: -TimeZoneId 'Central Standard Time'
 .EXAMPLE
-    MINIMAL SET PARAMETERS: SomeProperty 'Central Standard Time'
+    MINIMAL SET PARAMETERS: -TimeZoneId 'Central Standard Time'
+.EXAMPLE
+    -Action Set -TimeZoneId 'foo' -Force -PassThru
+
+    A custom example showing and explaining bevarior. Always and only include
+    parameters on the first line, not how to call the script.
 .NOTES
-    Any additional notes
+    To see the list of available timezones on a machine, run:
+
+    ```powershell
+    Get-TimeZone -ListAvailable
+    ```
 #>
 [PsinderBlockScript(
-    # SingleInstance,
-    # Modules = 'ModuleName>=x.y.z'
+    SingleInstance,
+    Modules = 'Microsoft.PowerShell.Management>=3.1.0.0'
 )]
 param(
+    [ValidateScript( {
+            $_ -in (Get-TimeZone -ListAvailable).Id
+        })]
+    [ArgumentCompleter( {
+            param ($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+            Get-TimeZone -ListAvailable | ForEach-Object -Process { $_.Id }
+        })]
     [PsinderBlockParameter(ExcludeForGet, MandatoryFor = ('Test', 'Set'))]
-    # Comment based help for SomeProperty
-    [string]$SomeProperty
+    # Specify the TimeZone by ID
+    [string]$TimeZoneId
 )
 
 [pscustomobject]@{
@@ -46,7 +64,7 @@ param(
         #     }
         [pscustomobject]@{
             Target  = { $env:COMPUTERNAME }
-            Message = { "Changing TimeZoneId from $($PropertyInfo.TimeZoneId.CurrentState) to $($TimeZoneId)" }
+            Message = { "Changing TimeZoneId from $($PropertyInfo.TimeZoneId.CurrentState) to $TimeZoneId" }
             Change  = {
                 # Use a Try/Catch if you need to do specific error handling;
                 # Otherwise just let it throw an exception on an error
