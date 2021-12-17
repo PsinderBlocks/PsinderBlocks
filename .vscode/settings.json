@@ -1,0 +1,13 @@
+{
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+    "powershell.codeFormatting.pipelineIndentationStyle": "IncreaseIndentationForFirstPipeline",
+    "powershell.codeFormatting.preset": "OTBS",
+    "powershell.codeFormatting.trimWhitespaceAroundPipe": true,
+    "powershell.codeFormatting.useConstantStrings": true,
+    "powershell.codeFormatting.useCorrectCasing": true,
+    "powershell.debugging.createTemporaryIntegratedConsole": true,
+    "powershell.integratedConsole.suppressStartupBanner": true,
+    "powershell.pester.useLegacyCodeLens": false,
+    "files.eol": "\n"
+}
